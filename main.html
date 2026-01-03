@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Memories</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary:#ff7a7a;
+  --secondary:#6c63ff;
+  --card:#1b1f3a;
+  --text:#fff;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins}
+
+body{
+  background:linear-gradient(135deg,#0f1220,#14173a);
+  color:var(--text);
+  animation:pageLoad 1.2s ease forwards;
+  overflow-x:hidden;
+}
+
+/* CINEMATIC LOAD */
+@keyframes pageLoad{
+  from{opacity:0;transform:scale(1.05)}
+  to{opacity:1;transform:scale(1)}
+}
+
+/* FLOATING GLOW */
+body::before{
+  content:"";
+  position:fixed;
+  width:450px;
+  height:450px;
+  background:radial-gradient(circle,#6c63ff55,transparent 70%);
+  top:-120px;
+  left:-120px;
+  animation:glowMove 12s infinite alternate ease-in-out;
+  z-index:-1;
+}
+
+@keyframes glowMove{
+  to{transform:translate(350px,300px)}
+}
+
+/* HERO */
+header{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+header h1{
+  font-size:3.2rem;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+header p{
+  opacity:.8;
+  margin-top:1rem;
+}
+
+/* EXPLORE BUTTON */
+.explore-btn{
+  display:inline-block;
+  margin-top:2.5rem;
+  padding:.9rem 2.5rem;
+  border-radius:30px;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:white;
+  text-decoration:none;
+  font-weight:600;
+  letter-spacing:.5px;
+  position:relative;
+  overflow:hidden;
+  transition:.3s ease;
+}
+
+.explore-btn::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);
+  transform:translateX(-100%);
+  transition:.6s;
+}
+
+.explore-btn:hover::after{
+  transform:translateX(100%);
+}
+
+.explore-btn:hover{
+  transform:translateY(-4px);
+  box-shadow:0 15px 35px rgba(108,99,255,.4);
+}
+
+/* ALBUMS */
+section{
+  max-width:1200px;
+  margin:auto;
+  padding:4rem 2rem;
+}
+
+.albums{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:2rem;
+}
+
+.album{
+  background:var(--card);
+  border-radius:20px;
+  overflow:hidden;
+  cursor:pointer;
+  position:relative;
+  transform:translateY(40px);
+  opacity:0;
+  animation:albumReveal 1s ease forwards;
+}
+
+.album:nth-child(1){animation-delay:.2s}
+.album:nth-child(2){animation-delay:.4s}
+
+@keyframes albumReveal{
+  to{transform:translateY(0);opacity:1}
+}
+
+.album::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.18),transparent);
+  opacity:0;
+  transition:.6s;
+}
+
+.album:hover::after{opacity:1}
+
+.album img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  transition:.8s cubic-bezier(.19,1,.22,1);
+}
+
+.album:hover img{
+  transform:scale(1.15) rotate(1deg);
+}
+
+.album-info{
+  padding:1.2rem;
+}
+
+.label{
+  position:absolute;
+  top:15px;
+  left:15px;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  padding:.3rem .8rem;
+  border-radius:20px;
+  font-size:.7rem;
+}
+
+/* =========================
+   MOBILE RESPONSIVE FIXES
+   ========================= */
+
+@media (max-width: 768px) {
+
+  header {
+    padding: 2rem 1.2rem;
+    min-height: 100svh;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+  }
+
+  header p {
+    font-size: 0.95rem;
+  }
+
+  .explore-btn {
+    padding: 0.9rem 2rem;
+    font-size: 0.95rem;
+  }
+
+  section {
+    padding: 3rem 1.2rem;
+  }
+
+  .album img {
+    height: 180px;
+  }
+
+  .album-info h3 {
+    font-size: 1rem;
+  }
+
+  .album-info span {
+    font-size: 0.85rem;
+  }
+}
+
+/* Touch devices – disable hover-only effects */
+@media (hover: none) {
+  .album:hover img {
+    transform: none;
+  }
+
+  .album:hover::after {
+    opacity: 0;
+  }
+
+  .explore-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Better tap feedback */
+.album,
+.explore-btn {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.album:active {
+  transform: scale(0.97);
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <h1>Our Memories</h1>
+    <p>Pieces of our stories</p>
+
+    <!-- EXPLORE BUTTON -->
+    <a href="#albums" class="explore-btn">Explore Memories</a>
+  </div>
+</header>
+
+<!-- ALBUM SECTION -->
+<section id="albums">
+  <h2>📅 Memory Albums</h2>
+
+  <div class="albums">
+
+    <a href="jan.html" class="album">
+      <img src="january/cover.jpg">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>January 2026</h3>
+        <span>The first sparks of 2026, captured forever.</span>
+      </div>
+    </a>
+
+    <a href="#" class="album">
+      <img src="covers/black.png">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>February 2026</h3>
+        <span>Coming Soon</span>
+      </div>
+    </a>
+
+
+    <a href="#" class="album">
+      <img src="covers/black.png">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>March 2026</h3>
+        <span>Coming Soon</span>
+      </div>
+    </a>
+
+
+    <a href="#" class="album">
+      <img src="covers/black.png">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>April 2026</h3>
+        <span>Coming Soon</span>
+      </div>
+    </a>
+
+
+    <a href="#" class="album">
+      <img src="covers/black.png">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>May 2026</h3>
+        <span>Coming Soon</span>
+      </div>
+    </a>
+
+
+    <a href="#" class="album">
+      <img src="covers/black.png">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>June 2026</h3>
+        <span>Coming Soon</span>
+      </div>
+    </a>
+
+
+    <a href="#" class="album">
+      <img src="covers/black.png">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>July 2026</h3>
+        <span>Coming Soon</span>
+      </div>
+    </a>
+
+
+
+    <a href="#" class="album">
+      <img src="covers/black.png">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>August 2026</h3>
+        <span>Coming Soon</span>
+      </div>
+    </a>
+
+
+    <a href="#" class="album">
+      <img src="covers/black.png">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>September 2026</h3>
+        <span>Coming Soon</span>
+      </div>
+    </a>
+
+
+    <a href="#" class="album">
+      <img src="covers/black.png">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>October 2026</h3>
+        <span>Coming Soon</span>
+      </div>
+    </a>
+
+
+    <a href="#" class="album">
+      <img src="covers/black.png">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>November 2026</h3>
+        <span>Coming Soon</span>
+      </div>
+    </a>
+
+
+    <a href="#" class="album">
+      <img src="covers/black.png">
+      <div class="label">2026</div>
+      <div class="album-info">
+        <h3>December 2026</h3>
+        <span>Coming Soon</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<script>
+/* Smooth scroll for Explore button */
+document.querySelector(".explore-btn").addEventListener("click", e=>{
+  e.preventDefault();
+  document.querySelector("#albums").scrollIntoView({behavior:"smooth"});
+});
+
+/* Smooth page transition */
+document.querySelectorAll(".album").forEach(album=>{
+  album.addEventListener("click",e=>{
+    if(album.getAttribute("href")==="#") return;
+    e.preventDefault();
+    document.body.style.transition="0.6s ease";
+    document.body.style.opacity="0";
+    document.body.style.transform="scale(.95)";
+    setTimeout(()=>window.location.href=album.href,600);
+  });
+});
+</script>
+
+</body>
+</html>
