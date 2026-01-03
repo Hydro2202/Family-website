@@ -21,12 +21,6 @@ body{
   background:linear-gradient(135deg,#0f1220,#14173a);
   color:var(--text);
   overflow-x:hidden;
-  animation:pageLoad 1.2s ease forwards;
-}
-
-@keyframes pageLoad{
-  from{opacity:0;transform:scale(1.05)}
-  to{opacity:1;transform:scale(1)}
 }
 
 /* FLOATING GLOW */
@@ -41,10 +35,46 @@ body::before{
   animation:glowMove 14s infinite alternate ease-in-out;
   z-index:-1;
 }
+@keyframes glowMove{ to{transform:translate(350px,300px)} }
 
-@keyframes glowMove{
-  to{transform:translate(350px,300px)}
+/* ================= INTRO QUOTE ================= */
+#quote-splash{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#0f1220,#14173a);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+  text-align:center;
+  transition:opacity 1.2s ease;
 }
+#quote-splash.hide{
+  opacity:0;
+  pointer-events:none;
+}
+#quote-splash p{
+  font-size:clamp(1.8rem,4vw,2.6rem);
+  font-weight:700;
+  background:linear-gradient(90deg,#ff7a7a,#6c63ff,#ff7a7a);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shimmer 3s linear infinite, quoteReveal 1s ease forwards;
+}
+@keyframes shimmer{ to{background-position:200% center} }
+@keyframes quoteReveal{ from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+/* HIDE MAIN CONTENT INITIALLY */
+#main-content{
+  opacity:0;
+  transition:opacity 1.2s ease;
+}
+#main-content.show{opacity:1}
+
+/* TEXT FLOATING */
+@keyframes textFloat{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes textFloatSoft{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
 
 /* HERO */
 header{
@@ -55,32 +85,20 @@ header{
   text-align:center;
   padding:2rem 1.2rem;
 }
-
 header h1{
   font-size:3.2rem;
   background:linear-gradient(90deg,var(--primary),var(--secondary));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:heroTitle 1.2s cubic-bezier(.19,1,.22,1);
+  animation:textFloat 6s ease-in-out infinite;
 }
-
 header p{
   opacity:.85;
   margin-top:1rem;
-  animation:heroSub 1.4s ease;
+  animation:textFloatSoft 7s ease-in-out infinite;
 }
 
-@keyframes heroTitle{
-  from{opacity:0;transform:translateY(30px) scale(.95)}
-  to{opacity:1;transform:translateY(0) scale(1)}
-}
-
-@keyframes heroSub{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:.85;transform:translateY(0)}
-}
-
-/* BUTTON */
+/* EXPLORE BUTTON WITH EFFECTS */
 .explore-btn{
   display:inline-block;
   margin-top:2.5rem;
@@ -90,28 +108,27 @@ header p{
   color:white;
   text-decoration:none;
   font-weight:600;
+  animation:textFloatSoft 6s ease-in-out infinite;
   position:relative;
   overflow:hidden;
-  transition:.3s ease;
+  transition:0.4s ease;
+  box-shadow:0 0 10px rgba(255,122,122,0.6), 0 0 20px rgba(108,99,255,0.4);
 }
-
-.explore-btn::after{
+.explore-btn:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 20px rgba(255,122,122,0.8), 0 0 40px rgba(108,99,255,0.6);
+}
+.explore-btn::before{
   content:"";
   position:absolute;
-  inset:0;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);
-  transform:translateX(-120%);
-  transition:.8s;
+  top:0; left:-50%;
+  width:200%;
+  height:100%;
+  background:linear-gradient(120deg,rgba(255,255,255,0.3),rgba(255,255,255,0),rgba(255,255,255,0.3));
+  transform:skewX(-25deg);
+  transition:0.5s;
 }
-
-.explore-btn:hover::after{
-  transform:translateX(120%);
-}
-
-.explore-btn:hover{
-  transform:translateY(-4px);
-  box-shadow:0 15px 40px rgba(108,99,255,.4);
-}
+.explore-btn:hover::before{ left:100%; }
 
 /* SECTION */
 section{
@@ -119,25 +136,9 @@ section{
   margin:auto;
   padding:4rem 2rem;
 }
-
 section h2{
-  position:relative;
-  display:inline-block;
-  margin-bottom:2rem;
+  animation:textFloatSoft 7s ease-in-out infinite;
 }
-
-section h2::after{
-  content:"";
-  position:absolute;
-  left:0;
-  bottom:-8px;
-  height:3px;
-  width:0%;
-  background:linear-gradient(90deg,var(--primary),var(--secondary));
-  animation:underlineGrow 1.2s ease forwards;
-}
-
-@keyframes underlineGrow{to{width:100%}}
 
 /* ALBUM GRID */
 .albums{
@@ -145,7 +146,6 @@ section h2::after{
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:2rem;
 }
-
 .album{
   background:var(--card);
   border-radius:20px;
@@ -154,45 +154,27 @@ section h2::after{
   position:relative;
   transform:translateY(40px);
   opacity:0;
-  transition:1s cubic-bezier(.19,1,.22,1);
+  transition:transform 1s cubic-bezier(.19,1,.22,1), box-shadow 0.3s ease;
 }
-
+@keyframes albumFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-6px);}
+}
 .album.reveal{
   transform:translateY(0);
   opacity:1;
+  animation:albumFloat 6s ease-in-out infinite;
 }
-
 .album:hover{
-  transform:translateY(-12px) scale(1.03);
-  box-shadow:0 30px 60px rgba(0,0,0,.45);
+  transform:scale(1.05);
+  box-shadow:0 20px 40px rgba(0,0,0,0.5);
 }
-
-.album::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,.25),transparent);
-  transform:translateX(-120%);
-  transition:.8s;
-}
-
-.album:hover::before{transform:translateX(120%)}
-
 .album img{
   width:100%;
   height:220px;
   object-fit:cover;
-  transition:.8s cubic-bezier(.19,1,.22,1);
 }
-
-.album:hover img{
-  transform:scale(1.15);
-}
-
-.album-info{
-  padding:1.2rem;
-}
-
+.album-info{padding:1.2rem}
 .label{
   position:absolute;
   top:15px;
@@ -203,22 +185,41 @@ section h2::after{
   font-size:.7rem;
 }
 
-/* MOBILE */
-@media(max-width:768px){
-  header h1{font-size:2.2rem}
-  .album img{height:180px}
+/* CLOVER TRAIL */
+.clover-trail{
+  position:fixed;
+  width:40px;
+  height:40px;
+  pointer-events:none;
+  z-index:9999;
+  background-image:url("covers/clovers.png");
+  background-size:contain;
+  background-repeat:no-repeat;
+  opacity:0;
+  transform:translate(-50%,-50%);
+  transition:transform 3s linear,opacity 1s;
 }
 
-/* TOUCH SAFE */
-@media(hover:none){
-  .album:hover{transform:none;box-shadow:none}
-  .album:hover img{transform:none}
+/* FOOTER */
+footer{
+  background:#1b1f3a;
+  color:#fff;
+  text-align:center;
+  padding:2rem 1rem;
+  margin-top:4rem;
 }
-
+footer p{ animation:textFloatSoft 8s ease-in-out infinite; }
 </style>
 </head>
 
 <body>
+
+<!-- INTRO QUOTE -->
+<div id="quote-splash">
+  <p>Collecting memories, not things</p>
+</div>
+
+<div id="main-content">
 
 <header>
   <div>
@@ -230,125 +231,73 @@ section h2::after{
 
 <section id="albums">
   <h2>📅 Memory Albums</h2>
-
   <div class="albums">
-
- 
-    <!-- January -->
-    <a href="jan.html" class="album"> 
-    <img src="january/cover.jpg"> 
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>January 2026</h3> 
-    <span>The first sparks of 2026, captured forever.</span> 
-    </div> </a> 
-
-    <a href="#" class="album"> 
-    <img src="covers/black.png">
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>February 2026</h3> 
-    <span>Coming Soon</span> 
-    </div> </a> 
-
-    <a href="#" class="album"> 
-    <img src="covers/black.png"> 
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>March 2026</h3> 
-    <span>Coming Soon</span> 
-    </div> </a> 
-
-    <a href="#" class="album"> 
-    <img src="covers/black.png"> 
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>April 2026</h3> 
-    <span>Coming Soon</span> 
-    </div> </a> 
-
-    <a href="#" class="album"> 
-    <img src="covers/black.png"> 
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>May 2026</h3> 
-    <span>Coming Soon</span> 
-    </div> </a> 
-
-    <a href="#" class="album"> 
-    <img src="covers/black.png"> 
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>June 2026</h3> 
-    <span>Coming Soon</span> 
-    </div> </a> 
-
-    <a href="#" class="album"> 
-    <img src="covers/black.png"> 
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>July 2026</h3> 
-    <span>Coming Soon</span> 
-    </div> </a> 
-
-    <a href="#" class="album"> 
-    <img src="covers/black.png"> 
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>August 2026</h3> 
-    <span>Coming Soon</span> 
-    </div> </a> 
-
-    <a href="#" class="album"> 
-    <img src="covers/black.png"> 
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>September 2026</h3> 
-    <span>Coming Soon</span> 
-    </div> </a> 
-
-    <a href="#" class="album"> 
-    <img src="covers/black.png"> 
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>October 2026</h3> 
-    <span>Coming Soon</span> 
-    </div> </a> 
-
-    <a href="#" class="album"> 
-    <img src="covers/black.png"> 
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>November 2026</h3> 
-    <span>Coming Soon</span> 
-    </div> </a> 
-    
-    <a href="#" class="album"> 
-    <img src="covers/black.png"> 
-    <div class="label">2026</div> 
-    <div class="album-info"> 
-    <h3>December 2026</h3> 
-    <span>Coming Soon</span> 
-    </div> </a>
-
+    <!-- ALL ALBUMS UNTOUCHED -->
+    <a href="jan.html" class="album"><img src="january/cover.jpg"><div class="label">2026</div><div class="album-info"><h3>January</h3><span>The first sparks of 2026, captured forever.</span></div></a>
+    <a href="#" class="album"><img src="covers/black.png"><div class="label">2026</div><div class="album-info"><h3>February</h3><span>Coming Soon</span></div></a>
+    <a href="#" class="album"><img src="covers/black.png"><div class="label">2026</div><div class="album-info"><h3>March</h3><span>Coming Soon</span></div></a>
+    <a href="#" class="album"><img src="covers/black.png"><div class="label">2026</div><div class="album-info"><h3>April</h3><span>Coming Soon</span></div></a>
+    <a href="#" class="album"><img src="covers/black.png"><div class="label">2026</div><div class="album-info"><h3>May</h3><span>Coming Soon</span></div></a>
+    <a href="#" class="album"><img src="covers/black.png"><div class="label">2026</div><div class="album-info"><h3>June</h3><span>Coming Soon</span></div></a>
+    <a href="#" class="album"><img src="covers/black.png"><div class="label">2026</div><div class="album-info"><h3>July</h3><span>Coming Soon</span></div></a>
+    <a href="#" class="album"><img src="covers/black.png"><div class="label">2026</div><div class="album-info"><h3>August</h3><span>Coming Soon</span></div></a>
+    <a href="#" class="album"><img src="covers/black.png"><div class="label">2026</div><div class="album-info"><h3>September</h3><span>Coming Soon</span></div></a>
+    <a href="#" class="album"><img src="covers/black.png"><div class="label">2026</div><div class="album-info"><h3>October</h3><span>Coming Soon</span></div></a>
+    <a href="#" class="album"><img src="covers/black.png"><div class="label">2026</div><div class="album-info"><h3>November</h3><span>Coming Soon</span></div></a>
+    <a href="#" class="album"><img src="covers/black.png"><div class="label">2026</div><div class="album-info"><h3>December</h3><span>Coming Soon</span></div></a>
   </div>
 </section>
 
+<footer>
+  <p>Created 2026</p>
+  <p>Web developer: Raiden Villapando</p>
+  <p>Every month tells a story worth remembering</p>
+</footer>
+
+</div>
+
+<div id="clover-container"></div>
+
 <script>
-document.querySelector(".explore-btn").onclick=e=>{
-  e.preventDefault();
-  document.querySelector("#albums").scrollIntoView({behavior:"smooth"});
-};
+/* SHOW MAIN AFTER QUOTE */
+const splash=document.getElementById("quote-splash");
+const main=document.getElementById("main-content");
+function showMain(){
+  splash.classList.add("hide");
+  setTimeout(()=>main.classList.add("show"),600);
+}
+setTimeout(showMain,3500);
+splash.addEventListener("click",showMain);
 
-/* Scroll reveal */
+/* SCROLL REVEAL */
 const observer=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting)e.target.classList.add("reveal");
-  });
+  entries.forEach(e=>e.isIntersecting&&e.target.classList.add("reveal"));
 },{threshold:.15});
-
 document.querySelectorAll(".album").forEach(a=>observer.observe(a));
+
+/* CLOVER TRAIL */
+const cloverContainer=document.getElementById("clover-container");
+document.addEventListener("mousemove",e=>{
+  const c=document.createElement("div");
+  c.className="clover-trail";
+  c.style.left=e.clientX+"px";
+  c.style.top=e.clientY+"px";
+  c.style.opacity=1;
+  cloverContainer.appendChild(c);
+  setTimeout(()=>{c.style.opacity=0;setTimeout(()=>c.remove(),300)},300);
+});
+
+/* BACKGROUND MUSIC */
+const bgMusic=document.createElement("audio");
+bgMusic.src="music.mp3";
+bgMusic.loop=true;
+document.body.appendChild(bgMusic);
+document.addEventListener("click",()=>bgMusic.play(),{once:true});
 </script>
+
+
+
+
 
 </body>
 </html>

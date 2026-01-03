@@ -127,6 +127,8 @@ header{
   <!-- 📌 PINNED VIDEOS -->
   <div class="media pinned"><video src="january/vid14.mp4"></video></div>
   <div class="media pinned"><video src="january/vid11.mp4"></video></div>
+  <div class="media pinned"><video src="january/vid10.mp4"></video></div>
+  <div class="media pinned"><video src="january/vid12.mp4"></video></div>
 
   <!-- IMAGES -->
   <div class="media"><img src="january/cover.jpg"></div> 
@@ -161,9 +163,7 @@ header{
   <div class="media"><video src="january/vid5.mp4"></video></div> 
   <div class="media"><video src="january/vid6.mp4"></video></div> 
   <div class="media"><video src="january/vid7.mp4"></video></div> 
-  <div class="media"><video src="january/vid9.mp4"></video></div> 
-  <div class="media"><video src="january/vid10.mp4"></video></div> 
-  <div class="media"><video src="january/vid12.mp4"></video></div> 
+  <div class="media"><video src="january/vid9.mp4"></video></div>  
   <div class="media"><video src="january/vid13.mp4"></video></div>
   <div class="media"><video src="january/vid8.mp4"></video></div>
 
@@ -178,7 +178,6 @@ const obs=new IntersectionObserver(entries=>{
     if(e.isIntersecting)e.target.classList.add("show");
   });
 },{threshold:.12});
-
 document.querySelectorAll(".media").forEach(m=>obs.observe(m));
 
 /* Lightbox */
@@ -188,7 +187,14 @@ document.querySelectorAll(".media img,.media video").forEach(el=>{
     lightbox.classList.add("active");
     lightbox.innerHTML="";
     const clone=el.cloneNode(true);
-    if(clone.tagName==="VIDEO"){clone.controls=true;clone.autoplay=true;}
+
+    if(clone.tagName==="VIDEO"){
+      clone.controls=true;
+      clone.autoplay=true;
+      // Lower background music
+      bgMusic.volume = 0.2;
+    }
+
     lightbox.appendChild(clone);
   };
 });
@@ -197,8 +203,20 @@ lightbox.onclick=e=>{
   if(e.target===lightbox){
     lightbox.classList.remove("active");
     lightbox.innerHTML="";
+    // Restore background music
+    bgMusic.volume = 1.0;
   }
 };
+
+/* BACKGROUND MUSIC */
+const bgMusic=document.createElement("audio");
+bgMusic.src="music.mp3"; 
+bgMusic.loop=true;
+bgMusic.volume = 1.0;
+document.body.appendChild(bgMusic);
+
+// Play music once user clicks anywhere
+document.addEventListener("click",()=>bgMusic.play(),{once:true});
 </script>
 
 </body>
