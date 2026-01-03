@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>January 2026 Memories</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -11,17 +12,17 @@ body{
   background:#0f1220;
   color:white;
   font-family:Poppins;
-  animation:pageIn 1s ease;
+  animation:fadeIn .9s ease;
 }
 
-@keyframes pageIn{
+@keyframes fadeIn{
   from{opacity:0;transform:translateY(40px)}
   to{opacity:1}
 }
 
 header{
   text-align:center;
-  padding:2rem;
+  padding:2rem 1rem;
 }
 
 .gallery{
@@ -30,24 +31,27 @@ header{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:1.5rem;
-  padding:2rem;
+  padding:2rem 1rem;
 }
 
 .media{
+  position:relative;
   border-radius:16px;
   overflow:hidden;
   cursor:pointer;
-  transform:scale(.9);
   opacity:0;
-  animation:mediaPop .8s ease forwards;
+  transform:translateY(40px) scale(.96);
+  transition:.9s cubic-bezier(.19,1,.22,1);
 }
 
-.media:nth-child(1){animation-delay:.2s}
-.media:nth-child(2){animation-delay:.4s}
-.media:nth-child(3){animation-delay:.6s}
+.media.show{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
 
-@keyframes mediaPop{
-  to{transform:scale(1);opacity:1}
+.media:hover{
+  transform:translateY(-10px) scale(1.03);
+  box-shadow:0 20px 45px rgba(0,0,0,.5);
 }
 
 .media img,
@@ -55,92 +59,58 @@ header{
   width:100%;
   height:220px;
   object-fit:cover;
-  transition:.4s;
 }
 
-.media:hover img,
-.media:hover video{
-  transform:scale(1.1);
+/* 📌 PINNED STYLE */
+.media.pinned{
+  border:2px solid rgba(255,122,122,.7);
+  box-shadow:0 25px 60px rgba(255,122,122,.25);
+}
+
+.media.pinned::after{
+  content:"📌 Pinned";
+  position:absolute;
+  top:12px;
+  right:12px;
+  background:linear-gradient(90deg,#ff7a7a,#6c63ff);
+  color:white;
+  font-size:.7rem;
+  font-weight:600;
+  padding:.35rem .6rem;
+  border-radius:20px;
+  box-shadow:0 6px 18px rgba(0,0,0,.4);
 }
 
 /* LIGHTBOX */
 .lightbox{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.9);
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(10px);
   display:none;
   align-items:center;
   justify-content:center;
+  z-index:99;
 }
 
 .lightbox.active{display:flex}
 
 .lightbox img,
 .lightbox video{
-  max-width:90%;
-  max-height:80vh;
+  max-width:95%;
+  max-height:75svh;
   border-radius:20px;
   animation:zoomIn .4s ease;
 }
 
 @keyframes zoomIn{
-  from{transform:scale(.7);opacity:0}
-  to{transform:scale(1);opacity:1}
+  from{opacity:0;transform:scale(.7)}
+  to{opacity:1;transform:scale(1)}
 }
 
-
-/* =========================
-   MOBILE RESPONSIVE FIXES
-   ========================= */
-
-@media (max-width: 768px) {
-
-  header {
-    padding: 1.5rem 1rem;
-  }
-
-  header h1 {
-    font-size: 1.8rem;
-  }
-
-  header p {
-    font-size: 0.9rem;
-  }
-
-  header a {
-    font-size: 0.9rem;
-  }
-
-  .gallery {
-    padding: 1.2rem;
-    gap: 1rem;
-  }
-
-  .media img,
-  .media video {
-    height: 180px;
-  }
+@media(max-width:768px){
+  .media img,.media video{height:180px}
 }
-
-/* Lightbox safe area for mobile */
-.lightbox img,
-.lightbox video {
-  max-width: 95%;
-  max-height: 75svh;
-}
-
-/* Tap feedback */
-.media {
-  -webkit-tap-highlight-color: transparent;
-}
-
-.media:active {
-  transform: scale(0.96);
-}
-
-
-
-
 </style>
 </head>
 
@@ -153,104 +123,83 @@ header{
 </header>
 
 <div class="gallery">
-  <div class="media"><img src="january/cover.jpg"></div>
-  <div class="media"><img src="january/pic1.jpg"></div>
-  <div class="media"><img src="january/pic2.jpg"></div>
-  <div class="media"><img src="january/pic3.jpg"></div>
-  <div class="media"><img src="january/pic4.jpg"></div>
-  <div class="media"><img src="january/pic5.jpg"></div>
-  <div class="media"><img src="january/pic6.jpg"></div>
-  <div class="media"><img src="january/pic7.jpg"></div>
-  <div class="media"><img src="january/pic8.jpg"></div>
-  <div class="media"><img src="january/pic9.jpg"></div>
-  <div class="media"><img src="january/pic10.jpg"></div>
-  <div class="media"><img src="january/pic11.jpg"></div>
-  <div class="media"><img src="january/pic12.jpg"></div>
-  <div class="media"><img src="january/pic13.jpg"></div>
-  <div class="media"><img src="january/pic14.jpg"></div>
-  <div class="media"><img src="january/pic15.jpg"></div>
-  <div class="media"><img src="january/pic16.jpg"></div>
-  <div class="media"><img src="january/pic17.jpg"></div>
-  <div class="media"><img src="january/pic18.jpg"></div>
-  <div class="media"><img src="january/pic19.jpg"></div>
+
+  <!-- 📌 PINNED VIDEOS -->
+  <div class="media pinned"><video src="january/vid14.mp4"></video></div>
+  <div class="media pinned"><video src="january/vid11.mp4"></video></div>
+
+  <!-- IMAGES -->
+  <div class="media"><img src="january/cover.jpg"></div> 
+  <div class="media"><img src="january/pic1.jpg"></div> 
+  <div class="media"><img src="january/pic2.jpg"></div> 
+  <div class="media"><img src="january/pic3.jpg"></div> 
+  <div class="media"><img src="january/pic4.jpg"></div> 
+  <div class="media"><img src="january/pic5.jpg"></div> 
+  <div class="media"><img src="january/pic6.jpg"></div> 
+  <div class="media"><img src="january/pic7.jpg"></div> 
+  <div class="media"><img src="january/pic8.jpg"></div> 
+  <div class="media"><img src="january/pic9.jpg"></div> 
+  <div class="media"><img src="january/pic10.jpg"></div> 
+  <div class="media"><img src="january/pic11.jpg"></div> 
+  <div class="media"><img src="january/pic12.jpg"></div> 
+  <div class="media"><img src="january/pic13.jpg"></div> 
+  <div class="media"><img src="january/pic14.jpg"></div> 
+  <div class="media"><img src="january/pic15.jpg"></div> 
+  <div class="media"><img src="january/pic16.jpg"></div> 
+  <div class="media"><img src="january/pic17.jpg"></div> 
+  <div class="media"><img src="january/pic18.jpg"></div> 
+  <div class="media"><img src="january/pic19.jpg"></div> 
   <div class="media"><img src="january/pic20.jpg"></div>
-  <div class="media"><img src="january/pic21.jpg"></div>
-  <div class="media"><img src="january/pic22.jpg"></div>
+  <div class="media"><img src="january/pic21.jpg"></div> 
+  <div class="media"><img src="january/pic22.jpg"></div> 
 
-<!-- Videos -->
-  <div class="media"><video src="january/vid1.mp4"></video></div>
-  <div class="media"><video src="january/vid2.mp4"></video></div>
-  <div class="media"><video src="january/vid3.mp4"></video></div>
-  <div class="media"><video src="january/vid4.mp4"></video></div>
-  <div class="media"><video src="january/vid5.mp4"></video></div>
-  <div class="media"><video src="january/vid6.mp4"></video></div>
-  <div class="media"><video src="january/vid7.mp4"></video></div>
-  <div class="media"><video src="january/vid8.mp4"></video></div>
-  <div class="media"><video src="january/vid9.mp4"></video></div>
-  <div class="media"><video src="january/vid10.mp4"></video></div>
-  <div class="media"><video src="january/vid11.mp4"></video></div>
-  <div class="media"><video src="january/vid12.mp4"></video></div>
+  <!-- VIDEOS -->
+  <div class="media"><video src="january/vid1.mp4"></video></div> 
+  <div class="media"><video src="january/vid2.mp4"></video></div> 
+  <div class="media"><video src="january/vid3.mp4"></video></div> 
+  <div class="media"><video src="january/vid4.mp4"></video></div> 
+  <div class="media"><video src="january/vid5.mp4"></video></div> 
+  <div class="media"><video src="january/vid6.mp4"></video></div> 
+  <div class="media"><video src="january/vid7.mp4"></video></div> 
+  <div class="media"><video src="january/vid9.mp4"></video></div> 
+  <div class="media"><video src="january/vid10.mp4"></video></div> 
+  <div class="media"><video src="january/vid12.mp4"></video></div> 
   <div class="media"><video src="january/vid13.mp4"></video></div>
-
-
-
-
-
-
+  <div class="media"><video src="january/vid8.mp4"></video></div>
 
 </div>
 
 <div class="lightbox" id="lightbox"></div>
 
 <script>
-const lightbox = document.getElementById("lightbox");
+/* Scroll reveal */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting)e.target.classList.add("show");
+  });
+},{threshold:.12});
 
-document.querySelectorAll(".media img, .media video").forEach(el => {
-  el.onclick = () => {
+document.querySelectorAll(".media").forEach(m=>obs.observe(m));
+
+/* Lightbox */
+const lightbox=document.getElementById("lightbox");
+document.querySelectorAll(".media img,.media video").forEach(el=>{
+  el.onclick=()=>{
     lightbox.classList.add("active");
-
-    // Clear previous content
-    lightbox.innerHTML = "";
-
-    if (el.tagName === "IMG") {
-      const img = document.createElement("img");
-      img.src = el.src;
-      img.alt = el.alt || "Memory";
-      img.style.maxWidth = "90%";
-      img.style.maxHeight = "80vh";
-      img.style.borderRadius = "20px";
-      img.style.animation = "zoomIn .4s ease";
-      lightbox.appendChild(img);
-    } else if (el.tagName === "VIDEO") {
-      const video = document.createElement("video");
-      video.src = el.src;
-      video.controls = true;
-      video.autoplay = true;      // <-- auto play
-      video.style.maxWidth = "90%";
-      video.style.maxHeight = "80vh";
-      video.style.borderRadius = "20px";
-      video.style.animation = "zoomIn .4s ease";
-      lightbox.appendChild(video);
-
-      video.play().catch(err => {
-        console.log("Autoplay blocked:", err);
-      });
-    }
+    lightbox.innerHTML="";
+    const clone=el.cloneNode(true);
+    if(clone.tagName==="VIDEO"){clone.controls=true;clone.autoplay=true;}
+    lightbox.appendChild(clone);
   };
 });
 
-// Close lightbox on click outside
-lightbox.onclick = e => {
-  if (e.target === lightbox) {
+lightbox.onclick=e=>{
+  if(e.target===lightbox){
     lightbox.classList.remove("active");
-
-    // Pause any video inside
-    const video = lightbox.querySelector("video");
-    if (video) video.pause();
+    lightbox.innerHTML="";
   }
 };
 </script>
-
 
 </body>
 </html>
